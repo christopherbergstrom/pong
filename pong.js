@@ -3,10 +3,10 @@ var table;
 var player;
 var comp;
 var ball;
-var down = [];
+var pressed = [];
 var up = true;
 var down = true;
-var vert = 10;
+var vert = 0;
 var intDown;
 var intup;
 
@@ -32,25 +32,25 @@ var downRight = false;
 $(document).ready(function()
 {
 
-  body = $("body")
-  table = $("#table");
+  body = $("body");
+  // table = $("#table");
+  // ball = $("#ball");
+  // player = $("#player");
+  // comp = $("#comp");
   // tableRect = table.getBoundingClientRect();
-  ball = $("#ball");
   // ballRect = table.getBoundingClientRect();
 
-  player = $("#player");
   // pTop = document.getElementById("pTop");
   // pMiddle = document.getElementById("pMiddle");
   // pBottom = document.getElementById("pBottom");
 
-  comp = $("#comp");
   // cTop = document.getElementById("cTop");
   // cMiddle = document.getElementById("cMiddle");
   // cBottom = document.getElementById("cBottom");
   // vDistance = 10;
   // hDistance = 10;
   createMenu();
-  findPositions();
+  // findPositions();
 });
 function createMenu()
 {
@@ -69,87 +69,76 @@ function createGame()
   $("#table").append("<div id='player'>P</div>");
   $("#table").append("<div id='comp'>C</div>");
   $("#table").append("<div id='ball'></div>");
+  table = $("#table");
+  ball = $("#ball");
+  player = $("#player");
+  comp = $("#comp");
   play();
 }
 function play()
 {
   player.css("top", vert+"px");
-  player.css("left", hor+"px");
-  check();
+  // player.css("left", hor+"px");
+  // check();
   $(document).keydown(function(e)
   {
-    down[e.which] = true;
+    pressed[e.which] = true;
+    console.log("key pressed");
 
-    // right
-    if (down[39] && right)
+    // up
+    if (pressed[38] && up)
     {
-      right = false;
-      moveRight = true;
-      moveLeft = false;
-      player.css("background-image", "url(images/stickRight.png)");
-      intRight = setInterval(function()
+      console.log("up pressed");
+      up = false;
+      // moveRight = true;
+      // moveLeft = false;
+      intUp = setInterval(function()
       {
-        hor += 1;
-        if(hor > 930)
+        vert -= 1;
+        if(vert < 0)
         {
-          hor = 930;
+          vert = 0;
         }
-        player.css("left", hor+"px");
+        player.css("top", vert+"px");
       }, 1);
     }
 
-    // left
-    if (down[37] && left)
+    // down
+    if (pressed[40] && down)
     {
-      left = false;
-      moveRight = false;
-      moveLeft = true;
-      player.css("background-image", "url(images/stickLeft.png)");
-      intLeft = setInterval(function()
+      console.log("down pressed");
+      down = false;
+      // moveRight = false;
+      // moveLeft = true;
+      intDown = setInterval(function()
       {
-        hor -= 1;
-        if(hor < 0)
+        vert += 1;
+        if((vert + 60) > (table.outerHeight() - 5))
         {
-          hor = 0;
+          vert = (table.outerHeight() - 65);
         }
-        player.css("left", hor+"px");
+        player.css("top", vert+"px");
       }, 1);
     }
   }).keyup(function(e)
   {
-    down[e.which] = false;
+    pressed[e.which] = false;
     if (e.which == 38 || e.which == 40)
     {
-      if (!right && jump)
+      if (!up && !pressed[38])
       {
-        if (intRight)
+        if (intUp)
         {
-          clearInterval(intRight);
-          right = true;
+          clearInterval(intUp);
+          up = true;
         }
       }
-      else if (!right && !jump && !down[39])
+      if (!down && !pressed[40])
       {
-        if (intRight)
+        if (intDown)
         {
-          clearInterval(intRight);
-          right = true;
-        }
-      }
-      if (!left && jump)
-      {
-        if (intLeft)
-        {
-          clearInterval(intLeft);
-          left = true;
-        }
-      }
-      else if (!left && !jump && !down[37])
-      {
-        if (intLeft)
-        {
-          clearInterval(intLeft);
-          left = true;
+          clearInterval(intDown);
+          down = true;
         }
       }
     }
