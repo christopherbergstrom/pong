@@ -1,0 +1,69 @@
+body
+{
+
+}
+#table
+{
+  position: relative;
+  background-color: white;
+  border: solid 5px black;
+  width: 80vw;
+  height: 50vh;
+  margin-left: 10vw;
+}
+#player
+{
+  position: absolute;
+  width: 10px;
+  height: 60px;
+  margin-left: 95%;
+  color: white;
+  background-color: black;
+}
+#pTop
+{
+    width: 10px;
+    height: 20px;
+}
+#pMiddle
+{
+    width: 10px;
+    height: 20px;
+}
+#pBottom
+{
+    width: 10px;
+    height: 20px;
+}
+#comp
+{
+  position: absolute;
+  width: 10px;
+  height: 60px;
+  margin-left: 5%;
+  color: white;
+  background-color: black;
+}
+#cTop
+{
+  width: 10px;
+  height: 20px;
+}
+#cMiddle
+{
+  width: 10px;
+  height: 20px;
+}
+#cBottom
+{
+  width: 10px;
+  height: 20px;
+}
+#ball
+{
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: black;
+  border-radius: 50%;
+}
