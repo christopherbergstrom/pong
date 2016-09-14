@@ -15,22 +15,32 @@ body
 {
   position: absolute;
   width: 10px;
-  height: 60px;
+  height: 100px;
   margin-left: 95%;
   color: white;
   background-color: black;
 }
-#pTop
+#pTopH
 {
     width: 10px;
     height: 20px;
 }
-#pMiddle
+#pTopL
 {
     width: 10px;
     height: 20px;
 }
-#pBottom
+#pMid
+{
+    width: 10px;
+    height: 20px;
+}
+#pLowL
+{
+    width: 10px;
+    height: 20px;
+}
+#pLowH
 {
     width: 10px;
     height: 20px;
@@ -39,22 +49,32 @@ body
 {
   position: absolute;
   width: 10px;
-  height: 60px;
+  height: 100px;
   margin-left: 5%;
   color: white;
   background-color: black;
 }
-#cTop
+#cTopH
 {
   width: 10px;
   height: 20px;
 }
-#cMiddle
+#cTopL
 {
   width: 10px;
   height: 20px;
 }
-#cBottom
+#cMid
+{
+  width: 10px;
+  height: 20px;
+}
+#cLowL
+{
+  width: 10px;
+  height: 20px;
+}
+#cLowH
 {
   width: 10px;
   height: 20px;
@@ -62,6 +82,8 @@ body
 #ball
 {
   position: absolute;
+  margin-left: 93%;
+  top: 45px;
   width: 10px;
   height: 10px;
   background-color: black;

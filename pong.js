@@ -9,9 +9,7 @@ var down = true;
 var vert = 0;
 var intDown;
 var intup;
-
-// var moveRight = true;
-// var moveLeft = false;
+var launched = true;
 
 // var pTop;
 // var pMiddle;
@@ -20,37 +18,16 @@ var intup;
 // var comp;
 // var cMiddle;
 // var cBottom;
-var time = 0;
-var time2 = 0;
-var launchDir;
-var tableRect;
-var ballRect;
+
 var upLeft = false;
 var downLeft = false;
 var upRight = false;
 var downRight = false;
+
 $(document).ready(function()
 {
-
   body = $("body");
-  // table = $("#table");
-  // ball = $("#ball");
-  // player = $("#player");
-  // comp = $("#comp");
-  // tableRect = table.getBoundingClientRect();
-  // ballRect = table.getBoundingClientRect();
-
-  // pTop = document.getElementById("pTop");
-  // pMiddle = document.getElementById("pMiddle");
-  // pBottom = document.getElementById("pBottom");
-
-  // cTop = document.getElementById("cTop");
-  // cMiddle = document.getElementById("cMiddle");
-  // cBottom = document.getElementById("cBottom");
-  // vDistance = 10;
-  // hDistance = 10;
   createMenu();
-  // findPositions();
 });
 function createMenu()
 {
@@ -67,7 +44,17 @@ function createGame()
 {
   body.append("<div id='table'></div>");
   $("#table").append("<div id='player'>P</div>");
+  $("#player").append("<div id='pTopH'></div>");
+  $("#player").append("<div id='pTopL'></div>");
+  $("#player").append("<div id='pMid'></div>");
+  $("#player").append("<div id='pLowL'></div>");
+  $("#player").append("<div id='pLowH'></div>");
   $("#table").append("<div id='comp'>C</div>");
+  $("#comp").append("<div id='cTopH'></div>");
+  $("#comp").append("<div id='cTopL'></div>");
+  $("#comp").append("<div id='cMid'></div>");
+  $("#comp").append("<div id='cLowL'></div>");
+  $("#comp").append("<div id='cLowH'></div>");
   $("#table").append("<div id='ball'></div>");
   table = $("#table");
   ball = $("#ball");
@@ -78,7 +65,6 @@ function createGame()
 function play()
 {
   player.css("top", vert+"px");
-  // player.css("left", hor+"px");
   // check();
   $(document).keydown(function(e)
   {
@@ -88,37 +74,39 @@ function play()
     // up
     if (pressed[38] && up)
     {
-      console.log("up pressed");
       up = false;
-      // moveRight = true;
-      // moveLeft = false;
       intUp = setInterval(function()
       {
         vert -= 1;
-        if(vert < 0)
-        {
-          vert = 0;
-        }
+        check();
         player.css("top", vert+"px");
+        if (launched)
+        {
+          ballPreLaunch();
+        }
       }, 1);
     }
 
     // down
-    if (pressed[40] && down)
+    else if (pressed[40] && down)
     {
-      console.log("down pressed");
       down = false;
-      // moveRight = false;
-      // moveLeft = true;
       intDown = setInterval(function()
       {
         vert += 1;
-        if((vert + 60) > (table.outerHeight() - 5))
-        {
-          vert = (table.outerHeight() - 65);
-        }
+        check();
         player.css("top", vert+"px");
+        if (launched)
+        {
+          ballPreLaunch();
+        }
       }, 1);
+    }
+    else if (pressed[32] && launched)
+    {
+      launched = false;
+      launchDir();
+      launch();
     }
   }).keyup(function(e)
   {
@@ -144,62 +132,53 @@ function play()
     }
   });
 }
-function findPositions()
+function ballPreLaunch()
 {
-  addEventListener("keydown", function(e)
-  {
-    // if (e.keyCode === 87)
-    // {
-    //   console.log("up");
-    //   moveUp();
-    // }
-    // if (e.keyCode === 83)
-    // {
-    //   console.log("down");
-    //   moveDown();
-    // }
-    if (e.keyCode === 38)
-    {
-      // console.log("up");
-      moveUp();
-    }
-    if (e.keyCode === 40)
-    {
-      // console.log("down");
-      moveDown();
-    }
-    if (e.keyCode === 32)
-    {
-      // console.log("space");
-      launch();
-    }
-  });
+  ball.css("top", (vert+45)+"px");
 }
-function moveUp()
+function check()
 {
-  var pRect = player.getBoundingClientRect();
-  if (pRect.top > tableRect.top)
+  if(vert < 0)
   {
-    player.style.position = "absolute";
-    var playerRect = player.getBoundingClientRect();
-    var playerY = pRect.top - 10;
-    player.style.transition = ".05s";
-    player.style.top = playerY+'px';
+    vert = 0;
+  }
+  else if((vert + 100) > (table.outerHeight() - 5))
+  {
+    vert = (table.outerHeight() - 105);
   }
 }
-function moveDown()
+function launchDir()
+{
+  var launchDirection = Math.floor(Math.random()*2);
+  if (launchDirection === 0)
+    moveBallUpLeft(pX, pY);
+  else if (launchDirection === 1)
+    moveBallDownLeft(pX, pY);
+  else
+    moveBallStraight(pX, pY);
+}
+function launch()
 {
   var pRect = player.getBoundingClientRect();
-  if (pRect.bottom < tableRect.bottom)
+  var pX = pRect.left;
+  var pY = pRect.top;
+  resetBall(pX, pY);
+  // whichDirection();
+  translateBallUpLeft(pX, pY);
+  upLeft = true;
+  time = setInterval(function()
   {
-    player.style.position = "absolute";
-    var playerRect = player.getBoundingClientRect();
-    var playerY = pRect.top + 10;
-    player.style.transition = ".05s";
-    player.style.top = playerY+'px';
-  }
+    ballRect = ball.getBoundingClientRect();
+    // translateComp(pPosRect.left);
+    translateComp(ballRect.top);
+  }, 1);
+  time2 = setInterval(function()
+  {
+    var bPosRect = ball.getBoundingClientRect();
+    check();
+  }, 1);
 }
-function translateComp(ballY)
+function moveComp(ballY)
 {
   comp.style.position = "absolute";
   // var compRect = cMiddle.getBoundingClientRect();
@@ -227,71 +206,11 @@ function translateComp(ballY)
   comp.style.transition = ".01s linear";
   comp.style.top = compY+'px';
 }
-function launch()
-{
-  var pRect = player.getBoundingClientRect();
-  var pX = pRect.left;
-  var pY = pRect.top;
-  resetBall(pX, pY);
-  // whichDirection();
-  translateBallUpLeft(pX, pY);
-  upLeft = true;
-  time = setInterval(function()
-  {
-    ballRect = ball.getBoundingClientRect();
-    // translateComp(pPosRect.left);
-    translateComp(ballRect.top);
-  }, 1);
-  time2 = setInterval(function()
-  {
-    var bPosRect = ball.getBoundingClientRect();
-    check();
-  }, 1);
-}
-function whichDirection()
-{
-  launchDir = Math.floor(Math.random()*3);
-  if (launchDir === 1)
-  {
-    translateBallUpLeft(pX, pY);
-  }
-  else if (launchDir === 2)
-  {
-    translateBallDownLeft(pX, pY);
-  }
-  else
-  {
-    translateBallStraight(pX, pY);
-  }
-}
+
 function resetBall(playerX, playerY)
 {
-  ball.style.position = "absolute";
-  var ballRect = ball.getBoundingClientRect();
-  var ballX = ballRect.left;
-  var ballY = ballRect.top;
-  ball.style.transition = ".01s linear";
-  ball.style.left = playerX+'px';
-  ball.style.top = playerY+'px';
-  // translateBallUpLeft(playerX, playerY);
-}
-function check(playerX, playerY)
-{
-  var ballRect = ball.getBoundingClientRect();
-  var ballX = ballRect.left;
-  var ballY = ballRect.top;
-  // if (ballRect.top > tableRect.top)
-  //   translateBallUpLeft()
-  // if (ballRect.bottom < tableRect.bottom)
-  //   translateBallUpLeft()
-  if (upLeft === true)
-    translateBallUpLeft();
-  if (downLeft === true)
-    translateBallDownLeft();
-  if (upRight === true)
-    translateBallUpRight();
-  if (downRight === true)
-    translateBallDownRight();
+  ball.css("margin-left", "93%");
+  ball.css("top", "45px");
 }
 function translateBallUpLeft()
 {
