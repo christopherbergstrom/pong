@@ -8,7 +8,7 @@ var up = true;
 var down = true;
 var vert = 0;
 var intDown;
-var intup;
+var intUp;
 var launched = true;
 
 // var pTop;
@@ -23,6 +23,11 @@ var upLeft = false;
 var downLeft = false;
 var upRight = false;
 var downRight = false;
+var sharpUpLeft = false;
+var sharpDownLeft = false;
+var sharpUpRight = false;
+var sharpDownRight = false;
+var straight = false;
 
 $(document).ready(function()
 {
@@ -69,8 +74,6 @@ function play()
   $(document).keydown(function(e)
   {
     pressed[e.which] = true;
-    console.log("key pressed");
-
     // up
     if (pressed[38] && up)
     {
@@ -86,7 +89,6 @@ function play()
         }
       }, 1);
     }
-
     // down
     else if (pressed[40] && down)
     {
@@ -105,7 +107,6 @@ function play()
     else if (pressed[32] && launched)
     {
       launched = false;
-      launchDir();
       launch();
     }
   }).keyup(function(e)
@@ -147,219 +148,59 @@ function check()
     vert = (table.outerHeight() - 105);
   }
 }
-function launchDir()
-{
-  var launchDirection = Math.floor(Math.random()*2);
-  if (launchDirection === 0)
-    moveBallUpLeft(pX, pY);
-  else if (launchDirection === 1)
-    moveBallDownLeft(pX, pY);
-  else
-    moveBallStraight(pX, pY);
-}
 function launch()
 {
-  var pRect = player.getBoundingClientRect();
-  var pX = pRect.left;
-  var pY = pRect.top;
-  resetBall(pX, pY);
-  // whichDirection();
-  translateBallUpLeft(pX, pY);
-  upLeft = true;
-  time = setInterval(function()
-  {
-    ballRect = ball.getBoundingClientRect();
-    // translateComp(pPosRect.left);
-    translateComp(ballRect.top);
-  }, 1);
-  time2 = setInterval(function()
-  {
-    var bPosRect = ball.getBoundingClientRect();
-    check();
-  }, 1);
-}
-function moveComp(ballY)
-{
-  comp.style.position = "absolute";
-  // var compRect = cMiddle.getBoundingClientRect();
-  var compRect = comp.getBoundingClientRect();
-  var compY = compRect.top;
-  var compYBottom = compRect.bottom;
-  // var compY = compRect.top;
-  // console.log(ballY);
-  // console.log(compY);
-  // console.log(compYBottom);
-  // console.log(tableRect.top);
-  // console.log(tableRect.bottom);
-  if (ballY > compY)
-  {
-    // console.log("go down");
-    compY += 1;
-  }
-  else if (ballY < compYBottom)
-  {
-    compY -= 1;
-    // console.log("go up");
-  }
+  console.log("launched");
+  var launchDirection = Math.floor(Math.random()*2);
+  if (launchDirection === 0)
+    ballUpLeft();
+  else if (launchDirection === 1)
+    ballDownLeft();
   else
-    compY = compY;
-  comp.style.transition = ".01s linear";
-  comp.style.top = compY+'px';
+    ballStraight();
 }
+function moveComp()
+{
 
-function resetBall(playerX, playerY)
+}
+function ballUpLeft()
+{
+
+}
+function ballDownLeft()
+{
+
+}
+function ballUpRight()
+{
+
+}
+function ballDownRight()
+{
+
+}
+function ballSharpUpLeft()
+{
+
+}
+function ballSharpDownLeft()
+{
+
+}
+function ballSharpUpRight()
+{
+
+}
+function ballSharpDownRight()
+{
+
+}
+function ballStraight()
+{
+
+}
+function resetBall()
 {
   ball.css("margin-left", "93%");
   ball.css("top", "45px");
-}
-function translateBallUpLeft()
-{
-  var compRect = comp.getBoundingClientRect();
-  var ballRect = ball.getBoundingClientRect();
-  var ballX = ballRect.left;
-  var ballY = ballRect.top;
-  if (ballY > tableRect.top && ballX > compRect.right)
-  {
-    ball.style.position = "absolute";
-    ballX -= 1;
-    ballY -= 1;
-
-    ball.style.transition = ".01s linear";
-    ball.style.left = ballX+'px';
-    ball.style.top = ballY+'px';
-  }
-  // if ball hits comp
-  else if (ballY > tableRect.top && ballX <= compRect.right)
-  {
-    upLeft = false;
-    downLeft = false;
-    upRight = true;
-    downRight = false;
-  }
-  // if ball hits top
-  else
-  {
-    upLeft = false;
-    downLeft = true;
-    upRight = false;
-    downRight = false;
-  }
-}
-function translateBallDownLeft()
-{
-  var compRect = comp.getBoundingClientRect();
-  var ballRect = ball.getBoundingClientRect();
-  var ballX = ballRect.left;
-  var ballY = ballRect.bottom;
-  if (ballY < tableRect.bottom && ballX > compRect.right)
-  {
-    ball.style.position = "absolute";
-    ballX -= 1;
-    ballY += 1;
-
-    ball.style.transition = ".01s linear";
-    ball.style.left = ballX+'px';
-    ball.style.top = ballY+'px';
-  }
-  // if ball hits comp
-  else if (ballY > tableRect.top && ballX <= compRect.right)
-  {
-    upLeft = false;
-    downLeft = false;
-    upRight = false;
-    downRight = true;
-  }
-  // if ball hits bottom
-  else
-  {
-    upLeft = true;
-    downLeft = false;
-    upRight = false;
-    downRight = false;
-  }
-}
-function translateBallUpRight()
-{
-  var pRect = player.getBoundingClientRect();
-  var ballRect = ball.getBoundingClientRect();
-  var ballX = ballRect.right;
-  var ballY = ballRect.top;
-  if (ballY > tableRect.top && ballX < pRect.left)
-  {
-    ball.style.position = "absolute";
-    ballX += 1;
-    ballY -= 1;
-
-    ball.style.transition = ".01s linear";
-    ball.style.left = ballX+'px';
-    ball.style.top = ballY+'px';
-  }
-  // if ball hits player
-  else if (ballY > tableRect.top && ballX >= pRect.left)
-  {
-    upLeft = true;
-    downLeft = false;
-    upRight = false;
-    downRight = false;
-  }
-  // if ball hits top
-  else
-  {
-    upLeft = false;
-    downLeft = false;
-    upRight = false;
-    downRight = true;
-  }
-}
-function translateBallDownRight()
-{
-  var pRect = player.getBoundingClientRect();
-  var ballRect = ball.getBoundingClientRect();
-  var ballX = ballRect.right;
-  var ballY = ballRect.bottom;
-  if (ballY < tableRect.bottom && ballX < pRect.left)
-  {
-    ball.style.position = "absolute";
-    ballX += 1;
-    ballY += 1;
-
-    ball.style.transition = ".01s linear";
-    ball.style.left = ballX+'px';
-    ball.style.top = ballY+'px';
-  }
-  // if ball hits player
-  else if (ballY < tableRect.bottom && ballX >= pRect.left)
-  {
-    upLeft = false;
-    downLeft = true;
-    upRight = false;
-    downRight = false;
-  }
-  // if ball hits bottom
-  else
-  {
-    upLeft = false;
-    downLeft = false;
-    upRight = true;
-    downRight = false;
-  }
-}
-function translateBallStraight()
-{
-  ball.style.position = "absolute";
-  var ballRect = ball.getBoundingClientRect();
-  var ballX = ballRect.left;
-  var ballY = ballRect.top;
-  if (playerX > ballX)
-    ballX += 10;
-  else if (playerX < ballX)
-    ballX -= 10;
-  if (playerY > ballY)
-    ballY += 10;
-  else if (playerY < ballY)
-    ballY -= 10;
-
-  ball.style.transition = "5s linear";
-  ball.style.left = playerX+'px';
-  ball.style.top = playerY+'px';
 }
