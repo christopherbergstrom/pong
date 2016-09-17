@@ -12,7 +12,7 @@ var ballX = 0;
 var ballY = 45;
 var intDown;
 var intUp;
-var gameInt;
+var ballInt;
 var compInt;
 var launched = true;
 
@@ -59,13 +59,13 @@ function createGame()
   $("#table").append("<div id='tableBottom'></div>");
   $("#table").append("<div id='tableLeft'></div>");
   $("#table").append("<div id='tableRight'></div>");
-  $("#table").append("<div id='player'>P</div>");
+  $("#table").append("<div id='player'></div>");
   $("#player").append("<div id='p1'></div>");
   $("#player").append("<div id='p2'></div>");
   $("#player").append("<div id='p3'></div>");
   $("#player").append("<div id='p4'></div>");
   $("#player").append("<div id='p5'></div>");
-  $("#table").append("<div id='comp'>C</div>");
+  $("#table").append("<div id='comp'></div>");
   $("#comp").append("<div id='c1'></div>");
   $("#comp").append("<div id='c2'></div>");
   $("#comp").append("<div id='c3'></div>");
@@ -205,9 +205,10 @@ function ballCheck()
     console.log("right check");
     for (var i = 1; i < 6; i++)
     {
-      if (collision(ball, $("#p"+i+"")))
+      if (collision(ball, ($("#p"+i+""))))
       {
-        clearInterval(gameInt);
+        console.log("hit player");
+        clearInterval(ballInt);
         if (i === 1)
           ballSharpUpLeft();
         if (i === 2)
@@ -226,15 +227,19 @@ function ballCheck()
     console.log("left check");
     for (var i = 1; i < 6; i++)
     {
-      if (collision(ball, $("#c"+i+"")))
+      if (collision(ball, ($("#c"+i+""))))
       {
-        clearInterval(gameInt);
+        console.log("hit comp");
+        clearInterval(ballInt);
         if (i === 1)
           ballSharpUpRight();
         if (i === 2)
           ballUpRight();
         if (i === 3)
+        {
+          console.log("straight");
           ballRight();
+        }
         if (i === 4)
           ballDownRight();
         if (i === 5)
@@ -242,9 +247,9 @@ function ballCheck()
       }
     }
   }
-  else if(ballY <= 0)
+  if (ballY <= 0)
   {
-    clearInterval(gameInt);
+    clearInterval(ballInt);
     if (upLeft)
       ballDownLeft();
     if (upRight)
@@ -254,17 +259,17 @@ function ballCheck()
     if (sharpUpRight)
       ballSharpDownRight();
   }
-  else if((ballY + 10) > table.innerHeight())
+  else if ((ballY + 10) > table.innerHeight())
   {
-    clearInterval(gameInt);
+    clearInterval(ballInt);
     if (downLeft)
       ballUpLeft();
     if (downRight)
-      ballDownRight();
+      ballUpRight();
     if (sharpDownLeft)
-      ballSharpDownLeft();
+      ballSharpUpLeft();
     if (sharpDownRight)
-      ballSharpDownRight();
+      ballSharpUpRight();
   }
 }
 function moveComp()
@@ -289,7 +294,7 @@ function ballUpLeft()
 {
   makeFalse();
   upLeft = true;
-  gameInt = setInterval(function()
+  ballInt = setInterval(function()
   {
     ballX -= 1;
     ballY -= 1;
@@ -302,7 +307,7 @@ function ballDownLeft()
 {
   makeFalse();
   downLeft = true;
-  gameInt = setInterval(function()
+  ballInt = setInterval(function()
   {
     ballX -= 1;
     ballY += 1;
@@ -315,7 +320,7 @@ function ballUpRight()
 {
   makeFalse();
   upRight = true;
-  gameInt = setInterval(function()
+  ballInt = setInterval(function()
   {
     ballX += 1;
     ballY -= 1;
@@ -328,7 +333,7 @@ function ballDownRight()
 {
   makeFalse();
   downRight = true;
-  gameInt = setInterval(function()
+  ballInt = setInterval(function()
   {
     ballX += 1;
     ballY += 1;
@@ -341,7 +346,7 @@ function ballSharpUpLeft()
 {
   makeFalse();
   sharpUpLeft = true;
-  gameInt = setInterval(function()
+  ballInt = setInterval(function()
   {
     ballX -= 1;
     ballY -= 2;
@@ -354,7 +359,7 @@ function ballSharpDownLeft()
 {
   makeFalse();
   sharpDownLeft = true;
-  gameInt = setInterval(function()
+  ballInt = setInterval(function()
   {
     ballX -= 1;
     ballY += 2;
@@ -367,7 +372,7 @@ function ballSharpUpRight()
 {
   makeFalse();
   sharpUpRight = true;
-  gameInt = setInterval(function()
+  ballInt = setInterval(function()
   {
     ballX += 1;
     ballY -= 2;
@@ -380,7 +385,7 @@ function ballSharpDownRight()
 {
   makeFalse();
   sharpDownRight = true;
-  gameInt = setInterval(function()
+  ballInt = setInterval(function()
   {
     ballX += 1;
     ballY += 2;
@@ -393,7 +398,7 @@ function ballLeft()
 {
   makeFalse();
   left = true;
-  gameInt = setInterval(function()
+  ballInt = setInterval(function()
   {
     ballX -= 1;
     ball.css("left", ballX+"px");
@@ -404,7 +409,7 @@ function ballRight()
 {
   makeFalse();
   right = true;
-  gameInt = setInterval(function()
+  ballInt = setInterval(function()
   {
     ballX += 1;
     ball.css("left", ballX+"px");
