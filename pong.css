@@ -11,6 +11,42 @@ body
   height: 50vh;
   margin-left: 10vw;
 }
+#tableTop
+{
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  bottom: 100%;
+  left: 0%;
+  /*background-color: blue;*/
+}
+#tableBottom
+{
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  top: 100%;
+  left: 0%;
+  /*background-color: red;*/
+}
+#tableLeft
+{
+  position: absolute;
+  width: 5px;
+  height: 100%;
+  top: 0%;
+  right: 100%;
+  /*background-color: green;*/
+}
+#tableRight
+{
+  position: absolute;
+  width: 5px;
+  height: 100%;
+  top: 0%;
+  left: 100%;
+  /*background-color: pink;*/
+}
 #player
 {
   position: absolute;

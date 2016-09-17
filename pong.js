@@ -9,6 +9,7 @@ var down = true;
 var vert = 0;
 var intDown;
 var intUp;
+var gameInt;
 var launched = true;
 
 // var pTop;
@@ -48,6 +49,10 @@ function createMenu()
 function createGame()
 {
   body.append("<div id='table'></div>");
+  $("#table").append("<div id='tableTop'></div>");
+  $("#table").append("<div id='tableBottom'></div>");
+  $("#table").append("<div id='tableLeft'></div>");
+  $("#table").append("<div id='tableRight'></div>");
   $("#table").append("<div id='player'>P</div>");
   $("#player").append("<div id='pTopH'></div>");
   $("#player").append("<div id='pTopL'></div>");
