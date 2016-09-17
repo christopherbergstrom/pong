@@ -7,6 +7,7 @@ var pressed = [];
 var up = true;
 var down = true;
 var vert = 0;
+var compVert = 0;
 var ballX = 0;
 var ballY = 45;
 var intDown;
@@ -153,6 +154,28 @@ function ballPreLaunch()
   ball.css("top", (vert+45)+"px");
   ballY = vert+45;
 }
+function launch()
+{
+  // console.log("ballX: "+ballX);
+  // console.log("ballY: "+ballY);
+  moveComp();
+  var launchDirection = Math.floor(Math.random()*3);
+  if (launchDirection === 0)
+  {
+    // console.log("up left");
+    ballUpLeft();
+  }
+  else if (launchDirection === 1)
+  {
+    // console.log("down left");
+    ballDownLeft();
+  }
+  else
+  {
+    // console.log("left");
+    ballLeft();
+  }
+}
 function playerCheck()
 {
   if(vert < 0)
@@ -164,34 +187,22 @@ function playerCheck()
     vert = (table.innerHeight() - 100);
   }
 }
-function launch()
-{
-  console.log("ballX: "+ballX);
-  console.log("ballY: "+ballY);
-  var launchDirection = Math.floor(Math.random()*3);
-  if (launchDirection === 0)
-  {
-    console.log("up left");
-    ballUpLeft();
-  }
-  else if (launchDirection === 1)
-  {
-    console.log("down left");
-    ballDownLeft();
-  }
-  else
-  {
-    console.log("left");
-    ballLeft();
-  }
-}
 function compCheck()
 {
+  if(compVert < 0)
+  {
+    compVert = 0;
+  }
+  else if((compVert + 100) > table.innerHeight())
+  {
+    compVert = (table.innerHeight() - 100);
+  }
 }
 function ballCheck()
 {
   if (ballX >= Math.floor(((table.innerWidth()/100) * 93)))
   {
+    console.log("right check");
     for (var i = 1; i < 6; i++)
     {
       if (collision(ball, $("#p"+i+"")))
@@ -212,6 +223,7 @@ function ballCheck()
   }
   else if (ballX <= Math.floor(((table.innerWidth()/100) * 7)))
   {
+    console.log("left check");
     for (var i = 1; i < 6; i++)
     {
       if (collision(ball, $("#c"+i+"")))
@@ -257,7 +269,21 @@ function ballCheck()
 }
 function moveComp()
 {
-
+  compInt = setInterval(function()
+  {
+    if ((compVert + 45) > ballY)
+    {
+      compVert-=1;
+      compCheck();
+      comp.css("top", compVert);
+    }
+    else if ((compVert + 45) < ballY)
+    {
+      compVert+=1;
+      compCheck();
+      comp.css("top", compVert);
+    }
+  }, 1);
 }
 function ballUpLeft()
 {
@@ -392,7 +418,7 @@ function resetBallPlayer()
 }
 function resetBallComp()
 {
-  ball.css("left", "93%");
+  ball.css("left", "7%");
   ball.css("top", comp.offset().top + 45);
 }
 function makeFalse()
