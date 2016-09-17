@@ -118,7 +118,7 @@ body
 #ball
 {
   position: absolute;
-  margin-left: 93%;
+  left: 93%;
   top: 45px;
   width: 10px;
   height: 10px;
