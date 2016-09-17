@@ -6,23 +6,20 @@ var ball;
 var pressed = [];
 var up = true;
 var down = true;
+var up2 = true;
+var down2 = true;
 var vert = 0;
 var compVert = 0;
 var ballX = 0;
 var ballY = 45;
 var intDown;
 var intUp;
+var intDown2;
+var intUp2;
 var ballInt;
 var compInt;
 var launched = true;
-
-// var pTop;
-// var pMiddle;
-// var pBottom;
-// var cTop;
-// var comp;
-// var cMiddle;
-// var cBottom;
+var onePlayer = false;
 
 var left = false;
 var right = false;
@@ -47,6 +44,12 @@ function createMenu()
   $("#menu").append("<button id='one'>1 Player</button>");
   $("#menu").append("<button id='two'>2 Player</button>");
   $("#one").click(function()
+  {
+    onePlayer = true;
+    $("#menu").remove();
+    createGame();
+  });
+  $("#two").click(function()
   {
     $("#menu").remove();
     createGame();
@@ -81,7 +84,15 @@ function createGame()
   player = $("#player");
   comp = $("#comp");
   ballX = Math.floor(((table.innerWidth()/100) * 93));
-  play();
+  if (onePlayer)
+  {
+    play();
+  }
+  else
+  {
+    play();
+    play2();
+  }
 }
 function play()
 {
@@ -149,6 +160,91 @@ function play()
     }
   });
 }
+function play2()
+{
+  comp.css("top", compVert+"px");
+  // check();
+  $(document).keydown(function(e)
+  {
+    pressed[e.which] = true;
+    // up
+    if (pressed[81] && up2)
+    {
+      up2 = false;
+      intUp2 = setInterval(function()
+      {
+        compVert -= 1;
+        player2Check();
+        comp.css("top", compVert+"px");
+        if (launched)
+        {
+          ballPreLaunch();
+        }
+      }, 1);
+    }
+    // down
+    else if (pressed[65] && down2)
+    {
+      down2 = false;
+      intDown2 = setInterval(function()
+      {
+        compVert += 1;
+        player2Check();
+        comp.css("top", compVert+"px");
+        if (launched)
+        {
+          ballPreLaunch();
+        }
+      }, 1);
+    }
+    else if (pressed[32] && launched)
+    {
+      launched = false;
+      launch();
+    }
+  }).keyup(function(e)
+  {
+    pressed[e.which] = false;
+    if (e.which == 38 || e.which == 40)
+    {
+      if (!up && !pressed[38])
+      {
+        if (intUp)
+        {
+          clearInterval(intUp);
+          up = true;
+        }
+      }
+      if (!down && !pressed[40])
+      {
+        if (intDown)
+        {
+          clearInterval(intDown);
+          down = true;
+        }
+      }
+    }
+    if (e.which == 81 || e.which == 65)
+    {
+      if (!up2 && !pressed[81])
+      {
+        if (intUp2)
+        {
+          clearInterval(intUp2);
+          up2 = true;
+        }
+      }
+      if (!down2 && !pressed[65])
+      {
+        if (intDown2)
+        {
+          clearInterval(intDown2);
+          down2 = true;
+        }
+      }
+    }
+  });
+}
 function ballPreLaunch()
 {
   ball.css("top", (vert+45)+"px");
@@ -156,23 +252,21 @@ function ballPreLaunch()
 }
 function launch()
 {
-  // console.log("ballX: "+ballX);
-  // console.log("ballY: "+ballY);
-  moveComp();
+  if (onePlayer)
+  {
+    moveComp();
+  }
   var launchDirection = Math.floor(Math.random()*3);
   if (launchDirection === 0)
   {
-    // console.log("up left");
     ballUpLeft();
   }
   else if (launchDirection === 1)
   {
-    // console.log("down left");
     ballDownLeft();
   }
   else
   {
-    // console.log("left");
     ballLeft();
   }
 }
@@ -185,6 +279,17 @@ function playerCheck()
   else if((vert + 100) > table.innerHeight())
   {
     vert = (table.innerHeight() - 100);
+  }
+}
+function player2Check()
+{
+  if(compVert < 0)
+  {
+    compVert = 0;
+  }
+  else if((compVert + 100) > table.innerHeight())
+  {
+    compVert = (table.innerHeight() - 100);
   }
 }
 function compCheck()
@@ -202,12 +307,10 @@ function ballCheck()
 {
   if (ballX >= Math.floor(((table.innerWidth()/100) * 93)))
   {
-    console.log("right check");
     for (var i = 1; i < 6; i++)
     {
       if (collision(ball, ($("#p"+i+""))))
       {
-        console.log("hit player");
         clearInterval(ballInt);
         if (i === 1)
           ballSharpUpLeft();
@@ -224,22 +327,17 @@ function ballCheck()
   }
   else if (ballX <= Math.floor(((table.innerWidth()/100) * 7)))
   {
-    console.log("left check");
     for (var i = 1; i < 6; i++)
     {
       if (collision(ball, ($("#c"+i+""))))
       {
-        console.log("hit comp");
         clearInterval(ballInt);
         if (i === 1)
           ballSharpUpRight();
         if (i === 2)
           ballUpRight();
         if (i === 3)
-        {
-          console.log("straight");
           ballRight();
-        }
         if (i === 4)
           ballDownRight();
         if (i === 5)
