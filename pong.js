@@ -12,6 +12,7 @@ var ballY = 45;
 var intDown;
 var intUp;
 var gameInt;
+var compInt;
 var launched = true;
 
 // var pTop;
@@ -58,17 +59,17 @@ function createGame()
   $("#table").append("<div id='tableLeft'></div>");
   $("#table").append("<div id='tableRight'></div>");
   $("#table").append("<div id='player'>P</div>");
-  $("#player").append("<div id='pTopH'></div>");
-  $("#player").append("<div id='pTopL'></div>");
-  $("#player").append("<div id='pMid'></div>");
-  $("#player").append("<div id='pLowL'></div>");
-  $("#player").append("<div id='pLowH'></div>");
+  $("#player").append("<div id='p1'></div>");
+  $("#player").append("<div id='p2'></div>");
+  $("#player").append("<div id='p3'></div>");
+  $("#player").append("<div id='p4'></div>");
+  $("#player").append("<div id='p5'></div>");
   $("#table").append("<div id='comp'>C</div>");
-  $("#comp").append("<div id='cTopH'></div>");
-  $("#comp").append("<div id='cTopL'></div>");
-  $("#comp").append("<div id='cMid'></div>");
-  $("#comp").append("<div id='cLowL'></div>");
-  $("#comp").append("<div id='cLowH'></div>");
+  $("#comp").append("<div id='c1'></div>");
+  $("#comp").append("<div id='c2'></div>");
+  $("#comp").append("<div id='c3'></div>");
+  $("#comp").append("<div id='c4'></div>");
+  $("#comp").append("<div id='c5'></div>");
   $("#table").append("<div id='ball'></div>");
   table = $("#table");
   tableTop = $("#tableTop");
@@ -189,7 +190,47 @@ function compCheck()
 }
 function ballCheck()
 {
-  if(ballY <= 0)
+  if (ballX >= Math.floor(((table.innerWidth()/100) * 93)))
+  {
+    for (var i = 1; i < 6; i++)
+    {
+      if (collision(ball, $("#p"+i+"")))
+      {
+        clearInterval(gameInt);
+        if (i === 1)
+          ballSharpUpLeft();
+        if (i === 2)
+          ballUpLeft();
+        if (i === 3)
+          ballLeft();
+        if (i === 4)
+          ballDownLeft();
+        if (i === 5)
+          ballSharpDownLeft();
+      }
+    }
+  }
+  else if (ballX <= Math.floor(((table.innerWidth()/100) * 7)))
+  {
+    for (var i = 1; i < 6; i++)
+    {
+      if (collision(ball, $("#c"+i+"")))
+      {
+        clearInterval(gameInt);
+        if (i === 1)
+          ballSharpUpRight();
+        if (i === 2)
+          ballUpRight();
+        if (i === 3)
+          ballRight();
+        if (i === 4)
+          ballDownRight();
+        if (i === 5)
+          ballSharpDownRight();
+      }
+    }
+  }
+  else if(ballY <= 0)
   {
     clearInterval(gameInt);
     if (upLeft)
@@ -272,19 +313,55 @@ function ballDownRight()
 }
 function ballSharpUpLeft()
 {
-
+  makeFalse();
+  sharpUpLeft = true;
+  gameInt = setInterval(function()
+  {
+    ballX -= 1;
+    ballY -= 2;
+    ball.css("left", ballX+"px");
+    ball.css("top", ballY+"px");
+    ballCheck();
+  }, 1);
 }
 function ballSharpDownLeft()
 {
-
+  makeFalse();
+  sharpDownLeft = true;
+  gameInt = setInterval(function()
+  {
+    ballX -= 1;
+    ballY += 2;
+    ball.css("left", ballX+"px");
+    ball.css("top", ballY+"px");
+    ballCheck();
+  }, 1);
 }
 function ballSharpUpRight()
 {
-
+  makeFalse();
+  sharpUpRight = true;
+  gameInt = setInterval(function()
+  {
+    ballX += 1;
+    ballY -= 2;
+    ball.css("left", ballX+"px");
+    ball.css("top", ballY+"px");
+    ballCheck();
+  }, 1);
 }
 function ballSharpDownRight()
 {
-
+  makeFalse();
+  sharpDownRight = true;
+  gameInt = setInterval(function()
+  {
+    ballX += 1;
+    ballY += 2;
+    ball.css("left", ballX+"px");
+    ball.css("top", ballY+"px");
+    ballCheck();
+  }, 1);
 }
 function ballLeft()
 {
@@ -308,10 +385,15 @@ function ballRight()
     ballCheck();
   }, 1);
 }
-function resetBall()
+function resetBallPlayer()
 {
   ball.css("left", "93%");
   ball.css("top", "45px");
+}
+function resetBallComp()
+{
+  ball.css("left", "93%");
+  ball.css("top", comp.offset().top + 45);
 }
 function makeFalse()
 {
@@ -325,4 +407,22 @@ function makeFalse()
   sharpDownLeft = false;
   sharpUpRight = false;
   sharpDownRight = false;
+}
+function collision($div1, $div2)
+{
+  var x1 = $div1.offset().left;
+  var y1 = $div1.offset().top;
+  var h1 = $div1.outerHeight(true);
+  var w1 = $div1.outerWidth(true);
+  var b1 = y1 + h1;
+  var r1 = x1 + w1;
+  var x2 = $div2.offset().left;
+  var y2 = $div2.offset().top;
+  var h2 = $div2.outerHeight(true);
+  var w2 = $div2.outerWidth(true);
+  var b2 = y2 + h2;
+  var r2 = x2 + w2;
+
+  if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
+  return true;
 }
