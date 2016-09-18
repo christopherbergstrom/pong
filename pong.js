@@ -19,7 +19,9 @@ var intUp2;
 var ballInt;
 var compInt;
 var launched = true;
+var playerTurn = true;
 var onePlayer = false;
+var compSpeed = 0.5;
 
 var left = false;
 var right = false;
@@ -57,6 +59,9 @@ function createMenu()
 }
 function createGame()
 {
+  body.append("<div id='scores'></div>");
+  $("#scores").append("<div id='compPoint'>0</div>");
+  $("#scores").append("<div id='playerPoint'>0</div>");
   body.append("<div id='table'></div>");
   $("#table").append("<div id='tableTop'></div>");
   $("#table").append("<div id='tableBottom'></div>");
@@ -247,27 +252,44 @@ function play2()
 }
 function ballPreLaunch()
 {
-  ball.css("top", (vert+45)+"px");
-  ballY = vert+45;
-}
-function launch()
-{
   if (onePlayer)
   {
-    moveComp();
-  }
-  var launchDirection = Math.floor(Math.random()*3);
-  if (launchDirection === 0)
-  {
-    ballUpLeft();
-  }
-  else if (launchDirection === 1)
-  {
-    ballDownLeft();
+    ball.css("top", (vert+45)+"px");
+    ballY = vert+45;
   }
   else
   {
-    ballLeft();
+    ball.css("top", (compVert+45)+"px");
+    ballY = compVert+45;
+  }
+}
+function launch()
+{
+  var launchDirection = Math.floor(Math.random()*3);
+  if (launchDirection === 0)
+  {
+    if (playerTurn)
+      ballUpLeft();
+    else
+      ballUpRight();
+  }
+  else if (launchDirection === 1)
+  {
+    if (playerTurn)
+      ballDownLeft();
+    else
+      ballDownRight();
+  }
+  else
+  {
+    if (playerTurn)
+      ballLeft();
+    else
+      ballRight();
+  }
+  if (onePlayer)
+  {
+    moveComp();
   }
 }
 function playerCheck()
@@ -305,6 +327,34 @@ function compCheck()
 }
 function ballCheck()
 {
+  // comp scores
+  if (ballX >= table.innerWidth())
+  {
+    clearInts();
+    $("#compPoint").html(parseInt(($("#compPoint").html()))+1);
+    launched = true;
+    playerTurn = true;
+    resetBallPlayer();
+  }
+  // player scores
+  else if (ballX <= 0)
+  {
+    clearInts();
+    $("#playerPoint").html(parseInt(($("#playerPoint").html()))+1);
+    playerTurn = false;
+    resetBallComp();
+    if (onePlayer)
+    {
+      setTimeout(function()
+      {
+        launch();
+      }, 1000);
+    }
+    else
+    {
+      launched = true;
+    }
+  }
   if (ballX >= Math.floor(((table.innerWidth()/100) * 93)))
   {
     for (var i = 1; i < 6; i++)
@@ -376,13 +426,13 @@ function moveComp()
   {
     if ((compVert + 45) > ballY)
     {
-      compVert-=1;
+      compVert-=compSpeed;
       compCheck();
       comp.css("top", compVert);
     }
     else if ((compVert + 45) < ballY)
     {
-      compVert+=1;
+      compVert+=compSpeed;
       compCheck();
       comp.css("top", compVert);
     }
@@ -517,12 +567,16 @@ function ballRight()
 function resetBallPlayer()
 {
   ball.css("left", "93%");
-  ball.css("top", "45px");
+  ball.css("top", (vert + 45)+"px");
+  ballX = Math.floor(((table.innerWidth()/100) * 93));
+  ballY = (vert + 45);
 }
 function resetBallComp()
 {
   ball.css("left", "7%");
-  ball.css("top", comp.offset().top + 45);
+  ball.css("top", (compVert + 45)+"px");
+  ballX = Math.floor(((table.innerWidth()/100) * 7));
+  ballY = (compVert + 45);
 }
 function makeFalse()
 {
@@ -536,6 +590,11 @@ function makeFalse()
   sharpDownLeft = false;
   sharpUpRight = false;
   sharpDownRight = false;
+}
+function clearInts()
+{
+  clearInterval(ballInt);
+  clearInterval(compInt);
 }
 function collision($div1, $div2)
 {
