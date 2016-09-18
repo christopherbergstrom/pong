@@ -18,6 +18,7 @@ var intDown2;
 var intUp2;
 var ballInt;
 var compInt;
+var gameSpeedInt;
 var launched = true;
 var playerTurn = true;
 var onePlayer = false;
@@ -25,9 +26,10 @@ var compSpeed = 1;
 var playerSpeed = 1;
 var ballSpeedX1 = 1;
 var ballSpeedX2 = 2;
-var ballSpeedX3 = 3;
+// var ballSpeedX3 = 3;
 var ballSpeedY1 = 1;
 var ballSpeedY2 = 2;
+var speedUpWaitTime = 3000;
 
 var left = false;
 var right = false;
@@ -286,20 +288,55 @@ function ballPreLaunch()
 }
 function launch()
 {
-  var launchDirection = Math.floor(Math.random()*3);
+  if (gameSpeedInt)
+    clearInterval(gameSpeedInt);
+  resetSpeeds();
+  gameSpeedInt = setInterval(function()
+  {
+    goFaster();
+  }, speedUpWaitTime);
+  var launchDirection = Math.floor(Math.random()*7);
   if (launchDirection === 0)
   {
     if (playerTurn)
-      ballLeft();
+      ballUpLeft();
     else
       ballUpRight();
   }
   else if (launchDirection === 1)
   {
     if (playerTurn)
-      ballLeft();
+      ballDownLeft();
     else
       ballDownRight();
+  }
+  else if (launchDirection === 2)
+  {
+    if (playerTurn)
+      ballSharpUpLeft();
+    else
+      ballSharpUpRight();
+  }
+  else if (launchDirection === 3)
+  {
+    if (playerTurn)
+      ballSharpDownLeft();
+    else
+      ballSharpDownRight();
+  }
+  else if (launchDirection === 4)
+  {
+    if (playerTurn)
+      ballUpSharpLeft();
+    else
+      ballUpSharpRight();
+  }
+  else if (launchDirection === 5)
+  {
+    if (playerTurn)
+      ballDownSharpLeft();
+    else
+      ballDownSharpRight();
   }
   else
   {
@@ -481,8 +518,8 @@ function ballUpLeft()
   upLeft = true;
   ballInt = setInterval(function()
   {
-    ballX -= ballSpeedX2;
-    ballY -= ballSpeedY2;
+    ballX -= ballSpeedX1;
+    ballY -= ballSpeedY1;
     ball.css("left", ballX+"px");
     ball.css("top", ballY+"px");
     ballCheck();
@@ -494,8 +531,8 @@ function ballDownLeft()
   downLeft = true;
   ballInt = setInterval(function()
   {
-    ballX -= ballSpeedX2;
-    ballY += ballSpeedY2;
+    ballX -= ballSpeedX1;
+    ballY += ballSpeedY1;
     ball.css("left", ballX+"px");
     ball.css("top", ballY+"px");
     ballCheck();
@@ -507,8 +544,8 @@ function ballUpRight()
   upRight = true;
   ballInt = setInterval(function()
   {
-    ballX += ballSpeedX2;
-    ballY -= ballSpeedY2;
+    ballX += ballSpeedX1;
+    ballY -= ballSpeedY1;
     ball.css("left", ballX+"px");
     ball.css("top", ballY+"px");
     ballCheck();
@@ -520,8 +557,8 @@ function ballDownRight()
   downRight = true;
   ballInt = setInterval(function()
   {
-    ballX += ballSpeedX2;
-    ballY += ballSpeedY2;
+    ballX += ballSpeedX1;
+    ballY += ballSpeedY1;
     ball.css("left", ballX+"px");
     ball.css("top", ballY+"px");
     ballCheck();
@@ -637,7 +674,7 @@ function ballLeft()
   left = true;
   ballInt = setInterval(function()
   {
-    ballX -= ballSpeedX3;
+    ballX -= ballSpeedX2;
     ball.css("left", ballX+"px");
     ballCheck();
   }, 1);
@@ -648,7 +685,7 @@ function ballRight()
   right = true;
   ballInt = setInterval(function()
   {
-    ballX += ballSpeedX3;
+    ballX += ballSpeedX2;
     ball.css("left", ballX+"px");
     ballCheck();
   }, 1);
@@ -688,6 +725,26 @@ function clearInts()
 {
   clearInterval(ballInt);
   clearInterval(compInt);
+}
+function goFaster()
+{
+  ballSpeedX1 += 0.2;
+  ballSpeedX2 += 0.2;
+  ballSpeedX3 += 0.2;
+  ballSpeedY1 += 0.2;
+  ballSpeedY2 += 0.2;
+  compSpeed += 0.1;
+  playerSpeed += 0.1;
+}
+function resetSpeeds()
+{
+  ballSpeedX1 = 1;
+  ballSpeedX2 = 2;
+  ballSpeedX3 = 3;
+  ballSpeedY1 = 1;
+  ballSpeedY2 = 2;
+  compSpeed = 1;
+  playerSpeed = 1.2;
 }
 function collision($div1, $div2)
 {
