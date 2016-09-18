@@ -11,7 +11,7 @@ var down2 = true;
 var vert = 0;
 var compVert = 0;
 var ballX = 0;
-var ballY = 45;
+var ballY = 65;
 var intDown;
 var intUp;
 var intDown2;
@@ -21,7 +21,13 @@ var compInt;
 var launched = true;
 var playerTurn = true;
 var onePlayer = false;
-var compSpeed = 0.5;
+var compSpeed = 1;
+var playerSpeed = 1;
+var ballSpeedX1 = 1;
+var ballSpeedX2 = 2;
+var ballSpeedX3 = 3;
+var ballSpeedY1 = 1;
+var ballSpeedY2 = 2;
 
 var left = false;
 var right = false;
@@ -33,7 +39,10 @@ var sharpUpLeft = false;
 var sharpDownLeft = false;
 var sharpUpRight = false;
 var sharpDownRight = false;
-var straight = false;
+var upSharpLeft = false;
+var downSharpLeft = false;
+var upSharpRight = false;
+var downSharpRight = false;
 
 $(document).ready(function()
 {
@@ -73,12 +82,16 @@ function createGame()
   $("#player").append("<div id='p3'></div>");
   $("#player").append("<div id='p4'></div>");
   $("#player").append("<div id='p5'></div>");
+  $("#player").append("<div id='p6'></div>");
+  $("#player").append("<div id='p7'></div>");
   $("#table").append("<div id='comp'></div>");
   $("#comp").append("<div id='c1'></div>");
   $("#comp").append("<div id='c2'></div>");
   $("#comp").append("<div id='c3'></div>");
   $("#comp").append("<div id='c4'></div>");
   $("#comp").append("<div id='c5'></div>");
+  $("#comp").append("<div id='c6'></div>");
+  $("#comp").append("<div id='c7'></div>");
   $("#table").append("<div id='ball'></div>");
   table = $("#table");
   tableTop = $("#tableTop");
@@ -112,7 +125,7 @@ function play()
       up = false;
       intUp = setInterval(function()
       {
-        vert -= 1;
+        vert -= playerSpeed;
         playerCheck();
         player.css("top", vert+"px");
         if (launched)
@@ -127,7 +140,7 @@ function play()
       down = false;
       intDown = setInterval(function()
       {
-        vert += 1;
+        vert += playerSpeed;
         playerCheck();
         player.css("top", vert+"px");
         if (launched)
@@ -178,7 +191,7 @@ function play2()
       up2 = false;
       intUp2 = setInterval(function()
       {
-        compVert -= 1;
+        compVert -= playerSpeed;
         player2Check();
         comp.css("top", compVert+"px");
         if (launched)
@@ -193,7 +206,7 @@ function play2()
       down2 = false;
       intDown2 = setInterval(function()
       {
-        compVert += 1;
+        compVert += playerSpeed;
         player2Check();
         comp.css("top", compVert+"px");
         if (launched)
@@ -254,13 +267,21 @@ function ballPreLaunch()
 {
   if (onePlayer)
   {
-    ball.css("top", (vert+45)+"px");
-    ballY = vert+45;
+    ball.css("top", (vert+65)+"px");
+    ballY = vert+65;
   }
   else
   {
-    ball.css("top", (compVert+45)+"px");
-    ballY = compVert+45;
+    if (playerTurn)
+    {
+      ball.css("top", (vert+65)+"px");
+      ballY = vert+65;
+    }
+    else
+    {
+      ball.css("top", (compVert+65)+"px");
+      ballY = compVert+65;
+    }
   }
 }
 function launch()
@@ -269,14 +290,14 @@ function launch()
   if (launchDirection === 0)
   {
     if (playerTurn)
-      ballUpLeft();
+      ballLeft();
     else
       ballUpRight();
   }
   else if (launchDirection === 1)
   {
     if (playerTurn)
-      ballDownLeft();
+      ballLeft();
     else
       ballDownRight();
   }
@@ -298,9 +319,9 @@ function playerCheck()
   {
     vert = 0;
   }
-  else if((vert + 100) > table.innerHeight())
+  else if((vert + 140) > table.innerHeight())
   {
-    vert = (table.innerHeight() - 100);
+    vert = (table.innerHeight() - 140);
   }
 }
 function player2Check()
@@ -309,9 +330,9 @@ function player2Check()
   {
     compVert = 0;
   }
-  else if((compVert + 100) > table.innerHeight())
+  else if((compVert + 140) > table.innerHeight())
   {
-    compVert = (table.innerHeight() - 100);
+    compVert = (table.innerHeight() - 140);
   }
 }
 function compCheck()
@@ -320,9 +341,9 @@ function compCheck()
   {
     compVert = 0;
   }
-  else if((compVert + 100) > table.innerHeight())
+  else if((compVert + 140) > table.innerHeight())
   {
-    compVert = (table.innerHeight() - 100);
+    compVert = (table.innerHeight() - 140);
   }
 }
 function ballCheck()
@@ -357,7 +378,7 @@ function ballCheck()
   }
   if (ballX >= Math.floor(((table.innerWidth()/100) * 93)))
   {
-    for (var i = 1; i < 6; i++)
+    for (var i = 1; i < 8; i++)
     {
       if (collision(ball, ($("#p"+i+""))))
       {
@@ -367,17 +388,21 @@ function ballCheck()
         if (i === 2)
           ballUpLeft();
         if (i === 3)
-          ballLeft();
+          ballUpSharpLeft();
         if (i === 4)
-          ballDownLeft();
+          ballLeft();
         if (i === 5)
+          ballDownSharpLeft();
+        if (i === 6)
+          ballDownLeft();
+        if (i === 7)
           ballSharpDownLeft();
       }
     }
   }
   else if (ballX <= Math.floor(((table.innerWidth()/100) * 7)))
   {
-    for (var i = 1; i < 6; i++)
+    for (var i = 1; i < 8; i++)
     {
       if (collision(ball, ($("#c"+i+""))))
       {
@@ -387,10 +412,14 @@ function ballCheck()
         if (i === 2)
           ballUpRight();
         if (i === 3)
-          ballRight();
+          ballUpSharpRight();
         if (i === 4)
-          ballDownRight();
+          ballRight();
         if (i === 5)
+          ballDownSharpRight();
+        if (i === 6)
+          ballDownRight();
+        if (i === 7)
           ballSharpDownRight();
       }
     }
@@ -400,39 +429,47 @@ function ballCheck()
     clearInterval(ballInt);
     if (upLeft)
       ballDownLeft();
-    if (upRight)
+    else if (upRight)
       ballDownRight();
-    if (sharpUpLeft)
+    else if (sharpUpLeft)
       ballSharpDownLeft();
-    if (sharpUpRight)
+    else if (sharpUpRight)
       ballSharpDownRight();
+    else if (upSharpLeft)
+      ballDownSharpLeft();
+    else if (upSharpRight)
+      ballDownSharpRight();
   }
   else if ((ballY + 10) > table.innerHeight())
   {
     clearInterval(ballInt);
     if (downLeft)
       ballUpLeft();
-    if (downRight)
+    else if (downRight)
       ballUpRight();
-    if (sharpDownLeft)
+    else if (sharpDownLeft)
       ballSharpUpLeft();
-    if (sharpDownRight)
+    else if (sharpDownRight)
       ballSharpUpRight();
+    else if (downSharpLeft)
+      ballUpSharpLeft();
+    else if (downSharpRight)
+      ballUpSharpRight();
   }
 }
 function moveComp()
 {
   compInt = setInterval(function()
   {
-    if ((compVert + 45) > ballY)
+    if ((compVert + 65) > ballY)
     {
-      compVert-=compSpeed;
+      compVert -= compSpeed;
       compCheck();
       comp.css("top", compVert);
     }
-    else if ((compVert + 45) < ballY)
+    else if ((compVert + 65) < ballY)
     {
-      compVert+=compSpeed;
+      compVert += compSpeed;
       compCheck();
       comp.css("top", compVert);
     }
@@ -444,8 +481,8 @@ function ballUpLeft()
   upLeft = true;
   ballInt = setInterval(function()
   {
-    ballX -= 1;
-    ballY -= 1;
+    ballX -= ballSpeedX2;
+    ballY -= ballSpeedY2;
     ball.css("left", ballX+"px");
     ball.css("top", ballY+"px");
     ballCheck();
@@ -457,8 +494,8 @@ function ballDownLeft()
   downLeft = true;
   ballInt = setInterval(function()
   {
-    ballX -= 1;
-    ballY += 1;
+    ballX -= ballSpeedX2;
+    ballY += ballSpeedY2;
     ball.css("left", ballX+"px");
     ball.css("top", ballY+"px");
     ballCheck();
@@ -470,8 +507,8 @@ function ballUpRight()
   upRight = true;
   ballInt = setInterval(function()
   {
-    ballX += 1;
-    ballY -= 1;
+    ballX += ballSpeedX2;
+    ballY -= ballSpeedY2;
     ball.css("left", ballX+"px");
     ball.css("top", ballY+"px");
     ballCheck();
@@ -483,8 +520,8 @@ function ballDownRight()
   downRight = true;
   ballInt = setInterval(function()
   {
-    ballX += 1;
-    ballY += 1;
+    ballX += ballSpeedX2;
+    ballY += ballSpeedY2;
     ball.css("left", ballX+"px");
     ball.css("top", ballY+"px");
     ballCheck();
@@ -496,8 +533,8 @@ function ballSharpUpLeft()
   sharpUpLeft = true;
   ballInt = setInterval(function()
   {
-    ballX -= 1;
-    ballY -= 2;
+    ballX -= ballSpeedX1;
+    ballY -= ballSpeedY2;
     ball.css("left", ballX+"px");
     ball.css("top", ballY+"px");
     ballCheck();
@@ -509,8 +546,8 @@ function ballSharpDownLeft()
   sharpDownLeft = true;
   ballInt = setInterval(function()
   {
-    ballX -= 1;
-    ballY += 2;
+    ballX -= ballSpeedX1;
+    ballY += ballSpeedY2;
     ball.css("left", ballX+"px");
     ball.css("top", ballY+"px");
     ballCheck();
@@ -522,8 +559,8 @@ function ballSharpUpRight()
   sharpUpRight = true;
   ballInt = setInterval(function()
   {
-    ballX += 1;
-    ballY -= 2;
+    ballX += ballSpeedX1;
+    ballY -= ballSpeedY2;
     ball.css("left", ballX+"px");
     ball.css("top", ballY+"px");
     ballCheck();
@@ -535,8 +572,60 @@ function ballSharpDownRight()
   sharpDownRight = true;
   ballInt = setInterval(function()
   {
-    ballX += 1;
-    ballY += 2;
+    ballX += ballSpeedX1;
+    ballY += ballSpeedY2;
+    ball.css("left", ballX+"px");
+    ball.css("top", ballY+"px");
+    ballCheck();
+  }, 1);
+}
+function ballUpSharpLeft()
+{
+  makeFalse();
+  upSharpLeft = true;
+  ballInt = setInterval(function()
+  {
+    ballX -= ballSpeedX2;
+    ballY -= ballSpeedY1;
+    ball.css("left", ballX+"px");
+    ball.css("top", ballY+"px");
+    ballCheck();
+  }, 1);
+}
+function ballDownSharpLeft()
+{
+  makeFalse();
+  downSharpLeft = true;
+  ballInt = setInterval(function()
+  {
+    ballX -= ballSpeedX2;
+    ballY += ballSpeedY1;
+    ball.css("left", ballX+"px");
+    ball.css("top", ballY+"px");
+    ballCheck();
+  }, 1);
+}
+function ballUpSharpRight()
+{
+  makeFalse();
+  upSharpRight = true;
+  ballInt = setInterval(function()
+  {
+    ballX += ballSpeedX2;
+    ballY -= ballSpeedY1;
+    ball.css("left", ballX+"px");
+    ball.css("top", ballY+"px");
+    ballCheck();
+  }, 1);
+}
+function ballDownSharpRight()
+{
+  makeFalse();
+  downSharpRight = true;
+  ballInt = setInterval(function()
+  {
+    ballX += ballSpeedX2;
+    ballY += ballSpeedY1;
     ball.css("left", ballX+"px");
     ball.css("top", ballY+"px");
     ballCheck();
@@ -548,7 +637,7 @@ function ballLeft()
   left = true;
   ballInt = setInterval(function()
   {
-    ballX -= 1;
+    ballX -= ballSpeedX3;
     ball.css("left", ballX+"px");
     ballCheck();
   }, 1);
@@ -559,7 +648,7 @@ function ballRight()
   right = true;
   ballInt = setInterval(function()
   {
-    ballX += 1;
+    ballX += ballSpeedX3;
     ball.css("left", ballX+"px");
     ballCheck();
   }, 1);
@@ -567,16 +656,16 @@ function ballRight()
 function resetBallPlayer()
 {
   ball.css("left", "93%");
-  ball.css("top", (vert + 45)+"px");
+  ball.css("top", (vert + 65)+"px");
   ballX = Math.floor(((table.innerWidth()/100) * 93));
-  ballY = (vert + 45);
+  ballY = (vert + 65);
 }
 function resetBallComp()
 {
   ball.css("left", "7%");
-  ball.css("top", (compVert + 45)+"px");
+  ball.css("top", (compVert + 65)+"px");
   ballX = Math.floor(((table.innerWidth()/100) * 7));
-  ballY = (compVert + 45);
+  ballY = (compVert + 65);
 }
 function makeFalse()
 {
@@ -590,6 +679,10 @@ function makeFalse()
   sharpDownLeft = false;
   sharpUpRight = false;
   sharpDownRight = false;
+  upSharpLeft = false;
+  downSharpLeft = false;
+  upSharpRight = false;
+  downSharpRight = false;
 }
 function clearInts()
 {

@@ -31,7 +31,7 @@ body
   background-color: white;
   border: solid 5px black;
   width: 80vw;
-  height: 50vh;
+  height: 60vh;
   margin-left: 10vw;
   /*margin-top: 40vh;*/
 }
@@ -75,7 +75,7 @@ body
 {
   position: absolute;
   width: 10px;
-  height: 100px;
+  height: 140px;
   margin-left: 95%;
   color: white;
   background-color: black;
@@ -96,15 +96,27 @@ body
 {
     width: 10px;
     height: 20px;
-    background-color: red;
+    background-color: pink;
 }
 #p4
 {
     width: 10px;
     height: 20px;
-    background-color: green;
+    background-color: red;
 }
 #p5
+{
+    width: 10px;
+    height: 20px;
+    background-color: pink;
+}
+#p6
+{
+    width: 10px;
+    height: 20px;
+    background-color: green;
+}
+#p7
 {
     width: 10px;
     height: 20px;
@@ -114,7 +126,7 @@ body
 {
   position: absolute;
   width: 10px;
-  height: 100px;
+  height: 140px;
   margin-left: 5%;
   color: white;
   background-color: black;
@@ -135,15 +147,27 @@ body
 {
   width: 10px;
   height: 20px;
-  background-color: red;
+  background-color: pink;
 }
 #c4
 {
   width: 10px;
   height: 20px;
-  background-color: green;
+  background-color: red;
 }
 #c5
+{
+  width: 10px;
+  height: 20px;
+  background-color: pink;
+}
+#c6
+{
+  width: 10px;
+  height: 20px;
+  background-color: green;
+}
+#c7
 {
   width: 10px;
   height: 20px;
@@ -153,7 +177,7 @@ body
 {
   position: absolute;
   left: 93%;
-  top: 45px;
+  top: 65px;
   width: 10px;
   height: 10px;
   background-color: black;
