@@ -1,26 +1,42 @@
 body
 {
-
+  text-align: center;
+}
+.buttons
+{
+  position: relative;
+  background-color: grey;
+  font-size: 2em;
+  border: 3px solid black;
+  margin: 1em;
+}
+.buttons:hover
+{
+  cursor: pointer;
 }
 #scores
 {
+  /*text-align: left;*/
+  position: relative;
   width: 80vw;
-  height: 20vh;
-  margin-left: 10vw;
+  height: 15vh;
+  /*margin-left: 10vw;*/
   display: inline-block;
 }
 #compPoint
 {
-  /*position: relative;*/
-  float: left;
+  position: absolute;
+  /*float: left;*/
+  left: 10%;
   font-size: 4em;
   /*width: 4em;
   height: 4em;*/
 }
 #playerPoint
 {
-  /*position: relative;*/
-  float: right;
+  position: absolute;
+  /*float: right;*/
+  right: 10%;
   font-size: 4em;
   /*width: 4em;
   height: 4em;*/
@@ -33,7 +49,6 @@ body
   width: 80vw;
   height: 60vh;
   margin-left: 10vw;
-  /*margin-top: 40vh;*/
 }
 #tableTop
 {
@@ -82,45 +97,45 @@ body
 }
 #p1
 {
-    width: 10px;
-    height: 20px;
-    background-color: blue;
+  width: 10px;
+  height: 20px;
+  /*background-color: blue;*/
 }
 #p2
 {
-    width: 10px;
-    height: 20px;
-    background-color: green;
+  width: 10px;
+  height: 20px;
+  /*background-color: green;*/
 }
 #p3
 {
-    width: 10px;
-    height: 20px;
-    background-color: pink;
+  width: 10px;
+  height: 20px;
+  /*background-color: pink;*/
 }
 #p4
 {
-    width: 10px;
-    height: 20px;
-    background-color: red;
+  width: 10px;
+  height: 20px;
+  /*background-color: red;*/
 }
 #p5
 {
-    width: 10px;
-    height: 20px;
-    background-color: pink;
+  width: 10px;
+  height: 20px;
+  /*background-color: pink;*/
 }
 #p6
 {
-    width: 10px;
-    height: 20px;
-    background-color: green;
+  width: 10px;
+  height: 20px;
+  /*background-color: green;*/
 }
 #p7
 {
-    width: 10px;
-    height: 20px;
-    background-color: blue;
+  width: 10px;
+  height: 20px;
+  /*background-color: blue;*/
 }
 #comp
 {
@@ -135,43 +150,43 @@ body
 {
   width: 10px;
   height: 20px;
-  background-color: blue;
+  /*background-color: blue;*/
 }
 #c2
 {
   width: 10px;
   height: 20px;
-  background-color: green;
+  /*background-color: green;*/
 }
 #c3
 {
   width: 10px;
   height: 20px;
-  background-color: pink;
+  /*background-color: pink;*/
 }
 #c4
 {
   width: 10px;
   height: 20px;
-  background-color: red;
+  /*background-color: red;*/
 }
 #c5
 {
   width: 10px;
   height: 20px;
-  background-color: pink;
+  /*background-color: pink;*/
 }
 #c6
 {
   width: 10px;
   height: 20px;
-  background-color: green;
+  /*background-color: green;*/
 }
 #c7
 {
   width: 10px;
   height: 20px;
-  background-color: blue;
+  /*background-color: blue;*/
 }
 #ball
 {

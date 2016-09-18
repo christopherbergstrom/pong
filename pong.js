@@ -54,8 +54,8 @@ $(document).ready(function()
 function createMenu()
 {
   body.append("<div id='menu'></div>");
-  $("#menu").append("<button id='one'>1 Player</button>");
-  $("#menu").append("<button id='two'>2 Player</button>");
+  $("#menu").append("<button id='one' class='buttons'>1 Player</button>");
+  $("#menu").append("<button id='two' class='buttons'>2 Player</button>");
   $("#one").click(function()
   {
     onePlayer = true;
@@ -95,6 +95,11 @@ function createGame()
   $("#comp").append("<div id='c6'></div>");
   $("#comp").append("<div id='c7'></div>");
   $("#table").append("<div id='ball'></div>");
+  body.append("<button id='menuBtn' class='buttons'>Menu</button>");
+  $("#menuBtn").click(function()
+  {
+    location.reload();
+  });
   table = $("#table");
   tableTop = $("#tableTop");
   tableBottom = $("#tableBottom");
