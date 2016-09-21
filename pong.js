@@ -22,8 +22,8 @@ var gameSpeedInt;
 var launched = true;
 var playerTurn = true;
 var onePlayer = false;
-var compSpeed = 1;
-var playerSpeed = 1;
+var compSpeed = 1.5;
+var playerSpeed = 1.5;
 var ballSpeedX1 = 1;
 var ballSpeedX2 = 2;
 // var ballSpeedX3 = 3;
@@ -199,7 +199,7 @@ function play2()
       intUp2 = setInterval(function()
       {
         compVert -= playerSpeed;
-        player2Check();
+        compCheck();
         comp.css("top", compVert+"px");
         if (launched)
         {
@@ -214,7 +214,7 @@ function play2()
       intDown2 = setInterval(function()
       {
         compVert += playerSpeed;
-        player2Check();
+        compCheck();
         comp.css("top", compVert+"px");
         if (launched)
         {
@@ -366,17 +366,6 @@ function playerCheck()
     vert = (table.innerHeight() - 140);
   }
 }
-function player2Check()
-{
-  if(compVert < 0)
-  {
-    compVert = 0;
-  }
-  else if((compVert + 140) > table.innerHeight())
-  {
-    compVert = (table.innerHeight() - 140);
-  }
-}
 function compCheck()
 {
   if(compVert < 0)
@@ -393,6 +382,9 @@ function ballCheck()
   // comp scores
   if (ballX >= table.innerWidth())
   {
+    if (gameSpeedInt)
+      clearInterval(gameSpeedInt);
+    resetSpeeds();
     clearInts();
     $("#compPoint").html(parseInt(($("#compPoint").html()))+1);
     launched = true;
@@ -402,6 +394,9 @@ function ballCheck()
   // player scores
   else if (ballX <= 0)
   {
+    if (gameSpeedInt)
+      clearInterval(gameSpeedInt);
+    resetSpeeds();
     clearInts();
     $("#playerPoint").html(parseInt(($("#playerPoint").html()))+1);
     playerTurn = false;
@@ -424,6 +419,8 @@ function ballCheck()
     {
       if (collision(ball, ($("#p"+i+""))))
       {
+        var pop = new Audio("pop.mp3");
+        pop.play();
         clearInterval(ballInt);
         if (i === 1)
           ballSharpUpLeft();
@@ -448,6 +445,8 @@ function ballCheck()
     {
       if (collision(ball, ($("#c"+i+""))))
       {
+        var pop = new Audio("pop.mp3");
+        pop.play();
         clearInterval(ballInt);
         if (i === 1)
           ballSharpUpRight();
@@ -468,6 +467,8 @@ function ballCheck()
   }
   if (ballY <= 0)
   {
+    var pop = new Audio("pop.mp3");
+    pop.play();
     clearInterval(ballInt);
     if (upLeft)
       ballDownLeft();
@@ -484,6 +485,8 @@ function ballCheck()
   }
   else if ((ballY + 10) > table.innerHeight())
   {
+    var pop = new Audio("pop.mp3");
+    pop.play();
     clearInterval(ballInt);
     if (downLeft)
       ballUpLeft();
